@@ -1,0 +1,1 @@
+Contoh: jika kode produk RK001, masukkan foto bernama RK001.jpg di folder ini.
