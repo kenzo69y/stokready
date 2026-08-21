@@ -41,8 +41,10 @@ function productVisual(p){
     <span class="fallback-icon" style="display:none">${p.i}</span>`;
 }
 
-function categoryFor(name){
+function categoryFor(name,code){
   const n=String(name||'').toLowerCase();
+  const c=String(code||'').trim().toUpperCase();
+  if(/^OB00[1-3]$/.test(c)) return 'Obat';
   if(n.includes('mie')||n.includes('biskuit')||n.includes('roti')||n.includes('snack')) return 'Makanan';
   if(n.includes('aqua')||n.includes('air')||n.includes('teh')||n.includes('kopi')||n.includes('minum')) return 'Minuman';
   if(n.includes('sabun')||n.includes('shampoo')||n.includes('sampo')||n.includes('pasta')||n.includes('deterjen')) return 'Kebutuhan';
@@ -57,7 +59,7 @@ async function loadProducts(){
     .select('id,code,name,sell_price,stock,created_at')
     .order('created_at',{ascending:false});
   if(error){console.error(error);$("grid").innerHTML=`<div class="empty">Gagal mengambil produk online.<br><small>${error.message}</small></div>`;loading=false;return;}
-  products=(data||[]).map(p=>({id:Number(p.id),n:p.name,p:Number(p.sell_price||0),s:Number(p.stock||0),code:p.code||'',c:categoryFor(p.name),i:iconFor(p.name),createdAt:p.created_at||null}));
+  products=(data||[]).map(p=>({id:Number(p.id),n:p.name,p:Number(p.sell_price||0),s:Number(p.stock||0),code:p.code||'',c:categoryFor(p.name,p.code),i:iconFor(p.name),createdAt:p.created_at||null}));
   loading=false;cats();render();syncCartWithStock();
 }
 
